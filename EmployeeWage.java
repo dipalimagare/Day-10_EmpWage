@@ -1,62 +1,101 @@
 package com.bl;
-
+import java.util.ArrayList;
 import java.util.Random;
-public class EmployeeWage {
-	private static final int IS_FUllTime = 1;
-	private static final int IS_PARTTIME = 2;
-	private static final int IS_ABSENT = 0;
-	private String companyName;
-	private int max_working_hrs;
-	private int days_in_month;
-	private int wage_per_hr;
+import java.util.Scanner;
 
-	EmployeeWage(String companyName, int max_working_hrs, int days_in_month, int wage_per_hr) {
-		this.companyName = companyName;
-		this.max_working_hrs = max_working_hrs;
-		this.days_in_month = days_in_month;
-		this.wage_per_hr = wage_per_hr;
-	}
+public class EmployeeWage {
+	static ArrayList<Emp> emp = new ArrayList<Emp>();
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		System.out.println("Welcome to Employee Wage Computation Program");
+		int ans = 1;
+		Scanner scan = new Scanner(System.in);
+		while (ans == 1) {
+			System.out.println("Enter Details-----");
+			Emp p = new Emp();
+			emp.add(p);
+			System.out.println("Want to Add more? Enter 1 for Yes, 2 for No");
+			ans = scan.nextInt();
+		}
+		for (int i = 0; i < emp.size(); i++) {
 
-		EmployeeWage e1 = new EmployeeWage("d-mart", 100, 20, 100);
-		EmployeeWage e2 = new EmployeeWage("jio-Mart", 150, 25, 110);
-		e1.employeeWage();
-		e2.employeeWage();
+			System.out.printf("Company: %-10s Total Wage: %d", emp.get(i).company,  emp.get(i).TotalWage);
+		}
+//		System.out.println("Monthly Wage : " + e1.monthlyWage());
+	}
+}
+
+interface EmployeeBuilder {
+
+	public void isPresent();
+
+	public int dailyWage(int h);
+
+	public int monthlyWage();
+}
+
+class Emp implements EmployeeBuilder {
+
+	String company;
+	int WAGE_PER_HOUR = 200;
+	int FULLTIME_HOUR = 8;
+	int PARTTIME_HOUR = 4;
+	int WORKING_DAYS = 20;
+	int TOTAL_WORKING_HOURS = 100;
+	public int hours;
+	public int TotalWage, totalHours = 0;
+	ArrayList<Integer> ArrOfDailyWage = new ArrayList<Integer>();
+
+	Emp() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter Company Name: ");
+		this.company = sc.next();
+		System.out.println("Enter Working Days: ");
+		this.WORKING_DAYS = sc.nextInt();
+		System.out.println("Enter Total Working Hours: ");
+		this.TOTAL_WORKING_HOURS = sc.nextInt();
+		System.out.println("Enter Wage Per Hour: ");
+		this.WAGE_PER_HOUR = sc.nextInt();
+		this.monthlyWage();
+
 	}
 
-	// Checking the employee attendance and paying salary based on their working
-	// hours
-	void employeeWage() {
-		int working_hr = 0;
-		int total_working_hr = 0;
-		int monthly_total_wage = 0;
-		int daily_wage_array[] = new int[days_in_month];
-		int days = 0;
-		while (days < days_in_month && total_working_hr < max_working_hrs) {
-			int emp_check = (int) (Math.floor(Math.random() * 10)) % 3;
-			switch (emp_check) {
-			case IS_FUllTime -> {
-				working_hr = 8;
-			}
-			case IS_PARTTIME -> {
-				working_hr = 4;
-			}
-			case IS_ABSENT -> {
-				working_hr = 0;
-			}
-			}
-			total_working_hr += working_hr;
-			daily_wage_array[days] = working_hr * wage_per_hr;
-			days++;
+	public void isPresent() {
+		Random ran = new Random();
+		int isPresent = ran.nextInt(3);
+		switch (isPresent) {
+		case 0:
+			hours = 0;
+			break;
+		case 1:
+			hours = PARTTIME_HOUR;
+			break;
+		case 2:
+			hours = FULLTIME_HOUR;
+			break;
 		}
-		for (int j = 0; j < days_in_month; j++) {
-			int day = j + 1;
-			System.out.println("Day " + day + " wage is " + daily_wage_array[j]);
-			monthly_total_wage = monthly_total_wage + daily_wage_array[j];
-		}
-		System.out.println("Monthly wage for " + companyName + " : " + monthly_total_wage + "\n");
 	}
 
+	public int dailyWage(int h) {
+		ArrOfDailyWage.add(h * WAGE_PER_HOUR);
+		return h * WAGE_PER_HOUR;
+	}
+
+	public int monthlyWage() {
+		int i = 0;
+		while (i < WORKING_DAYS && totalHours < TOTAL_WORKING_HOURS) {
+			isPresent();
+			TotalWage += dailyWage(hours);
+			totalHours += hours;
+			i++;
+			//System.out.println("Day" + i + ": " + dailyWage(hours));
+		}
+
+		return TotalWage;
+	}
+
+	public void empBuilder(Emp e) {
+		System.out.println("Company: " + e.company);
+		System.out.println("Total Wage: " + e.TotalWage);
+	}
 }

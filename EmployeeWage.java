@@ -10,10 +10,9 @@ public class EmployeeWage {
 
 	public static void calculatingDailyWage() {
 		int workingHr = 0;
-
 		int wagePerHr = 20;
 		Random r = new Random();
-		int empCheck = r.nextInt(2);
+		int empCheck = r.nextInt(3);
 		switch (empCheck) {
 		case 0: {
 			System.out.println("Employee is present");
@@ -24,6 +23,11 @@ public class EmployeeWage {
 		case 1: {
 			System.out.println("Employee is absent");
 			workingHr = 0;
+			break;
+		}
+		case 2: {
+			System.out.println("Employee is present");
+			workingHr = 4;
 			break;
 		}
 		}

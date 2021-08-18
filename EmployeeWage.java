@@ -5,31 +5,36 @@ import java.util.Random;
 public class EmployeeWage {
 	public static void main(String[] args) {
 		System.out.println("Welcome to Employee Wage Computation program");
-		calculatingDailyWage();
+		calculatingWage();
 	}
-
-	public static void calculatingDailyWage() {
+	public static void calculatingWage() {
+		int empHrs = 0;
+		int totalWorkingDays = 0;
 		int workingHr = 0;
 		int empWage = 0;
 		int wagePerHr = 20;
-		for (int i = 0; i < 20; i++) {
+		int maxHrs = 100;
+		int noOfWorkingDays = 100;
+
+		while (empHrs <= maxHrs && totalWorkingDays <= noOfWorkingDays) {
 			Random r = new Random();
 			int empCheck = r.nextInt(3);
 			switch (empCheck) {
 			case 0: {
+
 				workingHr = 8;
 				break;
 			}
-
 			case 1: {
-				workingHr = 0;
-				break;
-			}
-			case 2: {
 				workingHr = 4;
 				break;
 			}
+			case 2: {
+				workingHr = 0;
+				break;
 			}
+			}
+			empHrs += workingHr;
 			empWage = empWage + (workingHr * wagePerHr);
 		}
 		System.out.println("Employee wage is : " + empWage);
